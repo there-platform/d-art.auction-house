@@ -75,7 +75,9 @@ type authorization_signature = {
   message : bytes;
 }
 
-type bid_and_resolve_entrypoints = {
+type bid_and_resolve_entrypoints = 
+[@layout:comb]
+{
   token_info: token_info;
   authorization_signature: authorization_signature;
 }
@@ -87,8 +89,6 @@ type auction_entrypoints =
   | UpdatePreConfiguration of update_preconfiguration_param
   | DeletePreConfiguration of delete_preconfiguration_param
   | Admin of admin_minter_entrypoints
-  // | Sell of fix_sale
-  // | Buy of fa2_token
 
 type return = operation list * storage
 
@@ -258,7 +258,6 @@ let place_bid_on_existing_auction (token_info, storage: token_info * storage) : 
   end
 
 let place_bid(bid_and_resolve_entrypoints, storage : bid_and_resolve_entrypoints * storage) : (operation list) * storage = 
-  
   let _e : bool = verify_user(bid_and_resolve_entrypoints.authorization_signature.signed, bid_and_resolve_entrypoints.authorization_signature.message, storage) in
 
   if token_already_in_auction(bid_and_resolve_entrypoints.token_info, storage) 
@@ -302,44 +301,12 @@ let resolve_auction(bid_and_resolve_entrypoints, storage : bid_and_resolve_entry
     (op_list, {storage with auctions = updated_auctions})
   end
 
-// let get_for_sale_token (token_info, storage : token_info * storage) : fix_sale =
-//   Big_map.find_opt token_info storage.fixed_sales
-
-// let sell_token (fix_sale, storage : fix_sale * storage) : (operation list) * storage =
-//     let u : unit = assert_msg (Tezos.amount = 0mutez, "Amount sent must be 0mutez") in
-//     let e : unit = assert_msg (Tezos.sender = preconfigured_param.seller, "Only seller can sell the token") in
-    
-//     let token_info = {
-//       token_address = fix_sale.asset.fa2_address;
-//       token_id = fix_sale.asset.token_id
-//     } in
-
-//     let updated_fix_sales : (fa2_token, fix_sale) big_map = Big_map.update token_info (Some fix_sale) storage.fix_sales in
-//     let new_storage = { storage with fix_sales = updated_fix_sales } in
-//     let fa2_transfer : operation = transfer_token_in_contract(fix_sale.asset, Tezos.sender, Tezos.self_address) in
-//     ([fa2_transfer], new_storage)
-
-// let buy_token (token_info, storage : fix_buy * storage) : (operation list) * storage =
-
-//   let for_sale_token = get_for_sale_token(token_info, storage) in
-
-//   let fa2_transfer : operation list = [transfer_token_in_contract(fa2_token, Tezos.self_address, Tezos.sender)] in
-//   let seller_contract : unit contract = resolve_contract(for_sale_token.seller) in
-  
-//   let fee_contract : unit contract = resolve_contract(storage.fee.fee_address) in
-  
-//   let minter_fee : tez = percent_of_bid_tez (abs(10), for_sale_token.price) in
-//   let pay_roylaties : operation = Tezos.transaction unit minter_fee fee_contract in
-
-//   let fee : tez = percent_of_bid_tez (storage.fee.fee_percent, for_sale_token.price) in 
-//   let pay_fee : operation = Tezos.transaction unit fee fee_contract in 
-
 let english_auction_tez_main (p , storage : auction_entrypoints * storage) : (operation list) * storage = match p with
     | PreConfigure preconfig -> preconfigure_auction(preconfig, storage)
     | UpdatePreConfiguration update_preconfig -> update_preconfigured_auction(update_preconfig, storage)
     | DeletePreConfiguration delete_preconfig -> delete_preconfigured_auction(delete_preconfig, storage)
+
     | Bid bid_and_resolve_entrypoints -> place_bid(bid_and_resolve_entrypoints, storage)
     | Resolve bid_and_resolve_entrypoints -> resolve_auction(bid_and_resolve_entrypoints, storage)
+
     | Admin admin_param -> admin_main (admin_param, storage)
-    // | Sell fix_sale -> sell_token(fix_sale, storage)
-    // | Buy token_info -> buy_token(token_info, storage)

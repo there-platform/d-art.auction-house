@@ -231,7 +231,6 @@ type storage =
   min_raise_percent: nat;
   auctions : (token_info, auction) big_map;
   preconfigured_auctions : (token_info, preconfigured_auction) big_map;
-  // fix_sales : (token_info, fix_sale) big_map;
   fee : fee_data;
   admin : admin_storage;
 }

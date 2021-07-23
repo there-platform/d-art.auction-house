@@ -47,7 +47,7 @@ export async function deployContract(): Promise<void> {
             min_raise: 1,
             min_raise_percent: 1,
             fee: {
-                fee_percent: 10,
+                fee_percent: 5,
                 fee_address: 'tz1KhMoukVbwDXRZ7EUuDm7K9K5EmJSGewxd'
             },
             admin : {
@@ -58,8 +58,8 @@ export async function deployContract(): Promise<void> {
     }
     
     try {
-        const toolkit = new TezosToolkit('https://edonet.smartpy.io');
-        toolkit.setProvider({ signer: await InMemorySigner.fromSecretKey('edskS9Gdwb6GqG3arwBHi2K5n5D8do8ygqsBvy5nTpDfJ37iLJSbAML8UymBUJGbFUzdqQ3USWFuyphSPzAmxWRqNG9q9fhfzr') });
+        const toolkit = new TezosToolkit('http://florence.newby.org:8732');
+        toolkit.setProvider({ signer: await InMemorySigner.fromSecretKey(process.env.PRIVATE_KEY) });
 
         const originationOp = await toolkit.contract.originate(originateParam);
         
