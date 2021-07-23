@@ -2,7 +2,7 @@
 
 ## Introduction:
 
-    Auction house contract, in order to perform english auction contract.
+Auction house contract, in order to perform english auction contract.
 
 ## Install the CLI (TypeScript):
 
@@ -17,12 +17,12 @@ In order to run the tests:
 
     $ npm run-script test
         
-The different available commands are:
+The available commands are:
 
-    $ d-art.contracts compile-contract
+    $ d-art.auction-house compile-contract
         (Compile the contract contained in the project)
 
-    $ d-art.contracts deploy-contract
+    $ d-art.auction-house deploy-contract
         (Deploy the contract previously compiled in the project)
 
 # English Auction
@@ -86,7 +86,7 @@ type auction =
 
 ```
 
-These are all the parameters to configure an auction, before a first person bid auctions are not registeres in this big_map but in the `preconfigured_auctions` one where they can be edited or deleted by the seller.
+These are all the parameters to configure an auction, before a first person bid auctions are not registered in this big_map but in the `preconfigured_auctions` one where they can be edited or deleted by the seller.
 
 ### preconfigured_auctions
 
@@ -124,7 +124,7 @@ type fee_data =
 }
 ```
 
-Type in order to call the minter_royalties function from the minter contract in order to transfer royalties to the minter.
+Type in order to call the `minter_royalties` function from the minter contract in order to transfer royalties to the minter.
 
 ### admin
 
@@ -159,7 +159,7 @@ type auction_entrypoints =
 
 ### Admin
 
-The `Admin` entrypoint is only responsible to change the `pb_key` responsible to check the message and it's signature.
+The `Admin` entrypoint is only responsible to change the `pb_key` in order to check the message and it's signature.
 
 The entrypoints protected are:
 
@@ -233,7 +233,7 @@ All the needed field to configure an auction. Soon will come an allow listed ver
 
 ### UpdatePreConfiguration
 
-The `UpdatePreConfiguration` entrypoint is responsible to update a preconfigured auction, note that as soon as buyer bid it the preconfigured auction move to the auction big_map where updates, and deletion are not possible anymore.
+The `UpdatePreConfiguration` entrypoint is responsible to update a preconfigured auction, note that as soon as a buyer bid the preconfigured auction move to the auction big_map where updates, and deletion are not possible anymore.
 
 ``` ocaml
 
@@ -249,7 +249,7 @@ type update_preconfiguration_param =
 
 ### DeletePreConfiguration
 
-The `DeletePreConfiguration` entrypoint is responsible to delete a preconfigured auction, note that as soon as buyer bid it the preconfigured auction move to the auction big_map where updates, and deletion are not possible anymore.
+The `DeletePreConfiguration` entrypoint is responsible to delete a preconfigured auction, note that as soon as buyer bid the preconfigured auction move to the auction big_map where updates, and deletion are not possible anymore.
 
 ``` ocaml
 
